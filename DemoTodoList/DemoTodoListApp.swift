@@ -9,9 +9,16 @@ import SwiftUI
 
 @main
 struct DemoTodoListApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+  
+  var body: some Scene {
+    WindowGroup {
+      TodoListView()
+        .environment(\.managedObjectContext, CoreDataHelper.shared.persistentContainer.viewContext)
+        .onReceive(
+          NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+        ) { _ in
+          CoreDataHelper.shared.saveContext()
         }
     }
+  }
 }
